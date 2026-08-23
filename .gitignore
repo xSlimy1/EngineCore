@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+
+# Fabric / Forge Run Directories
+run/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Logs & System
+*.log
+.DS_Store
+Thumbs.db
