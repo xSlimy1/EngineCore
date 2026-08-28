@@ -1,0 +1,40 @@
+modLoader="javafml"
+loaderVersion="[48,)"
+license="Apache-2.0"
+
+[[mods]]
+modId="enginecore"
+version="1.0.0"
+displayName="EngineCore"
+logoFile="logo.png"
+authors="Da-Slimy"
+credits="Created and developed by Da-Slimy"
+displayURL="https://patreon.com/Da_Slimy"
+
+description='''
+EngineCore [v1.0.0 - MC 1.20.2] - High-performance modular server & client engine optimizer for Minecraft Forge 1.20.2:
+
+• Dynamic Mob AI Throttling: Intelligently throttles idle and distant entity ticking without affecting named mobs, ridden vehicles, or combat aggro.
+• Entity Blacklist / Whitelist: Built-in registry whitelist/blacklist to keep specific boss or modded mobs at full tick rates.
+• Farm Animal & Breeding Optimizer: Throttles idle mate/plant searches for passive livestock in dense pens.
+• Ground Item Merge Optimizer: Dramatically reduces tick cost from mass item drops (explosions, quarries, mob farms).
+• GC & Memory Allocation Optimizer: Reuses pooled BlockPos and scratch collision boxes to eliminate garbage collection stuttering.
+• Safe Redstone Update Batcher: Coalesces cascading block updates with an instant 0-tick bypass for sensitive redstone circuits.
+• Native In-Game Configuration GUI: Seamlessly adjust distances, intervals, module switches, and presets (Safe, Norm, Max) straight from the pause/mod menu.
+
+Support ongoing development on Patreon: https://patreon.com/Da_Slimy
+'''
+
+[[dependencies.enginecore]]
+    modId="forge"
+    mandatory=true
+    versionRange="[48.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.enginecore]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.2,1.20.3)"
+    ordering="NONE"
+    side="BOTH"
