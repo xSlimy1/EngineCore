@@ -1,110 +1,103 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
 
-version = project.mod_version
-group = 'com.enginecore'
+version = mod_version
+group = mod_group_id
 
 base {
-    archivesName = 'enginecore'
+    archivesName = mod_name
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-// Explicit alongside the toolchain above: some IDE/CI configurations resolve source/target
-// compatibility before the toolchain is applied, so both are set to avoid ambiguity.
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
-
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} " +
-        "(${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
 
 minecraft {
-    mappings channel: 'official', version: project.minecraft_version
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
 
     runs {
-        client {
+        configureEach {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods { enginecore { source sourceSets.main } }
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
         }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
         server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods { enginecore { source sourceSets.main } }
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
         }
     }
 }
 
-// ---------------------------------------------------------------------------------------
-// Mixin annotation-processor + refmap wiring. `priority = 1000` is set on every @Mixin
-// class itself (not here) so EngineCore's transforms apply after low-priority compat
-// shims but stays compatible with Sodium/Embeddium (client rendering, no overlap),
-// FerriteCore (memory layout, no overlap) and ModernFix (loading-time, no overlap).
-// ---------------------------------------------------------------------------------------
 mixin {
-    add sourceSets.main, 'enginecore.refmap.json'
-    config 'enginecore.mixins.json'
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-}
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
-    maven { url = 'https://maven.minecraftforge.net/' }
-    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
-            minecraft_version: project.minecraft_version,
-            minecraft_version_range: '[1.20.1,1.21)',
-            forge_version: project.forge_version,
-            forge_version_range: '[47,)',
-            loader_version_range: '[47,)',
-            mod_id: 'enginecore',
-            mod_name: 'EngineCore',
-            mod_license: 'MIT',
-            mod_version: project.mod_version,
-            mod_authors: 'EngineCore Team',
-            mod_description: 'Modular tick-loop, GC and redstone performance optimizer.'
+            minecraft_version: minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version,
+            forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id,
+            mod_name: mod_name,
+            mod_license: mod_license,
+            mod_version: mod_version,
+            mod_authors: mod_authors,
+            mod_description: mod_description
     ]
     inputs.properties replaceProperties
-    filesMatching(['META-INF/mods.toml']) {
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-jar {
+tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-                'Specification-Title'     : 'enginecore',
-                'Specification-Vendor'    : 'EngineCore Team',
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : 'Da-Slimy',
                 'Specification-Version'   : '1',
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : 'EngineCore Team',
-                'MixinConfigs'            : 'enginecore.mixins.json'
+                'Implementation-Vendor'   : 'Da-Slimy',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'MixinConfigs'            : "${mod_id}.mixins.json"
         ])
     }
+    finalizedBy 'reobfJar'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
