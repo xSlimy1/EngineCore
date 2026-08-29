@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[48,)"
+loaderVersion="[49,)"
 license="Apache-2.0"
 
 [[mods]]
@@ -12,7 +12,7 @@ credits="Created and developed by Da-Slimy"
 displayURL="https://patreon.com/Da_Slimy"
 
 description='''
-EngineCore [v1.0.0 - MC 1.20.2] - High-performance modular server & client engine optimizer for Minecraft Forge 1.20.2:
+EngineCore [v1.0.0 - MC 1.20.4] - High-performance modular server & client engine optimizer for Minecraft Forge 1.20.4:
 
 • Dynamic Mob AI Throttling: Intelligently throttles idle and distant entity ticking without affecting named mobs, ridden vehicles, or combat aggro.
 • Entity Blacklist / Whitelist: Built-in registry whitelist/blacklist to keep specific boss or modded mobs at full tick rates.
@@ -28,13 +28,13 @@ Support ongoing development on Patreon: https://patreon.com/Da_Slimy
 [[dependencies.enginecore]]
     modId="forge"
     mandatory=true
-    versionRange="[48.1.0,)"
+    versionRange="[49.1.0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.enginecore]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.20.2,1.20.3)"
+    versionRange="[1.20.4,1.20.5)"
     ordering="NONE"
     side="BOTH"
