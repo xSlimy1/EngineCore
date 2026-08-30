@@ -3,8 +3,6 @@
 Modular Forge 1.20.1 performance mod. Four independently toggleable modules, all controlled through
 one hot-reloadable server config (`config/enginecore-server.toml` after first launch).
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?logo=discord&logoColor=white)](https://discord.gg/xvsycREEcN)
-
 ## Modules
 
 | Module | Where | What it does |
