@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.enginecore.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "enginecore.refmap.json",
+  "mixins": [
+    "MixinEntity",
+    "MixinGoalSelector",
+    "MixinLevel",
+    "MixinMob",
+    "MixinServerLevel",
+    "MixinItemEntity",
+    "MixinAnimal"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
